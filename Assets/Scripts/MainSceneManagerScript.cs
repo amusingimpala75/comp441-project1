@@ -50,7 +50,9 @@ public class MainSceneManagerScript : MonoBehaviour
     {
         float pos = col - 1.5f;
         GameObject obj = Instantiate(blockPrefab, new Vector2(pos * scale, 4), Quaternion.identity);
-        obj.GetComponent<SpriteRenderer>().color = COLORS[Random.Range(0, COLORS.Length)];
+        int colorIdx = Random.Range(0, COLORS.Length);
+        obj.tag = $"block-{colorIdx}";
+        obj.GetComponent<SpriteRenderer>().color = COLORS[colorIdx];
         BlockScript block = obj.GetComponent<BlockScript>();
         block.manager = this;
         block.column = col;
@@ -67,11 +69,44 @@ public class MainSceneManagerScript : MonoBehaviour
         playerPosition = Mathf.Clamp(playerPosition + direction, -1, 1);
     }
 
-    public void ColumnAddBlock(GameObject block, int column)
+    // [TODO]: fix if swap would place column inside currently-falling block
+    public void OnSwap(InputValue input)
     {
-        columns[column].Add(block);
+        if (input.isPressed)
+        {
+            int leftIdx = playerPosition + 1;
+            int rightIdx = playerPosition + 2;
+            List<GameObject> left = columns[leftIdx];
+            List<GameObject> right = columns[rightIdx];
+            foreach (GameObject block in left)
+            {
+                block.transform.position = block.transform.position + (Vector3.right * scale);
+            }
+            foreach (GameObject block in right)
+            {
+                block.transform.position = block.transform.position + (Vector3.left * scale);
+            }
+            columns[leftIdx] = right;
+            columns[rightIdx] = left;
+        }
+    }
+
+    public void StopBlock(GameObject block, int column)
+    {
+        float height = block.transform.position.y;
+        if (columns[column].Count() > 0 && columns[column].Last().tag == block.tag)
+        {
+            Destroy(block);
+            GameObject prev = columns[column].Last();
+            columns[column].Remove(prev);
+            Destroy(prev);
+        }
+        else
+        {
+            columns[column].Add(block);
+        }
         numFalling--;
-        if (block.transform.position.y >= 3)
+        if (height >= 3)
         {
             running = false;
         }

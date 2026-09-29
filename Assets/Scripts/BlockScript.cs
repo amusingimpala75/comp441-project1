@@ -22,7 +22,7 @@ public class BlockScript : MonoBehaviour
     {
         if (falling)
         {
-            _rbody.linearVelocityY = -1 * manager.gameSpeed;
+            _rbody.linearVelocityY = -1.0f * manager.gameSpeed;
         }
     }
 
@@ -43,9 +43,8 @@ public class BlockScript : MonoBehaviour
 
     private void StopFalling()
     {
-        Debug.Log("destroying block");
         falling = false;
         _rbody.bodyType = RigidbodyType2D.Static;
-        manager.ColumnAddBlock(gameObject, column);
+        manager.StopBlock(gameObject, column);
     }
 }
