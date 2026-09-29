@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEditor.EditorTools;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -10,11 +11,13 @@ public class MainSceneManagerScript : MonoBehaviour
     [SerializeField] private GameObject player;
     private Transform _playerTransform;
     [SerializeField] private GameObject blockPrefab;
+    [SerializeField] private TMP_Text scoreText;
     [SerializeField] private float tileSize;
     [SerializeField] public float gameSpeed;
     private int playerPosition = 0;
     private float scale = 0f;
     private int numFalling = 0;
+    private int score = 0;
     private bool running = true;
     private List<GameObject>[] columns = {new(), new(), new(), new()};
 
@@ -61,6 +64,7 @@ public class MainSceneManagerScript : MonoBehaviour
     private void Update()
     {
         _playerTransform.position = (Vector2.down * 4) + (Vector2.right * (playerPosition * scale));
+        scoreText.text = $"Score: {score}";
     }
 
     public void OnMove(InputValue input)
@@ -100,6 +104,7 @@ public class MainSceneManagerScript : MonoBehaviour
             GameObject prev = columns[column].Last();
             columns[column].Remove(prev);
             Destroy(prev);
+            score++;
         }
         else
         {
