@@ -20,7 +20,7 @@ public class MainSceneManagerScript : MonoBehaviour
     private float scale = 0f;
     private int numFalling = 0;
     private int score = 0;
-    private static readonly int ScoreIncrementUnit = 5; 
+    private const int ScoreIncrementUnit = 5; 
     private bool running = true;
     private List<GameObject>[] columns = {new(), new(), new(), new()};
 
