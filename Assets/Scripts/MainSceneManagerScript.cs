@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using TMPro;
 using UnityEditor.EditorTools;
@@ -101,6 +102,7 @@ public class MainSceneManagerScript : MonoBehaviour
         {
             DestroyMatchBlock(block, column); 
         }
+        // [TODO]: Egg match logic
         else
         {
             columns[column].Add(block);
@@ -116,6 +118,11 @@ public class MainSceneManagerScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroy consecutive matching blocks in the same column
+    /// </summary>
+    /// <param name="block"></param>
+    /// <param name="column"></param>
     private void DestroyMatchBlock(GameObject block, int column)
     {
         Destroy(block);
@@ -123,7 +130,27 @@ public class MainSceneManagerScript : MonoBehaviour
         columns[column].Remove(prev);
         Destroy(prev);
 
-        score++;
+        // [TODO]: Audio
+
+        UpdateScore(); 
+    }
+
+    /// <summary>
+    /// Destroy top and bottom eggshells, as well as everything in between
+    /// </summary>
+    /// <param name="column"></param>
+    private void DestroyEgg(int column)
+    {
+        // [TODO]: Logic and audio
+    }
+
+    /// <summary>
+    /// Update score and scoreText
+    /// </summary>
+    /// <param name="howMuch">How much to add to the score. Default 5</param>
+    private void UpdateScore(int howMuch = 5)
+    {
+        score += howMuch;
         scoreText.text = $"Score: {score}";
     }
 }
