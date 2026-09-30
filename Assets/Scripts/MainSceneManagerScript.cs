@@ -7,6 +7,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(AudioSource))]
 public class MainSceneManagerScript : MonoBehaviour
 {
     [SerializeField] private GameObject player;
@@ -22,6 +23,13 @@ public class MainSceneManagerScript : MonoBehaviour
     private bool running = true;
     private List<GameObject>[] columns = {new(), new(), new(), new()};
 
+    // Audio
+    AudioSource _audioSource; 
+    public AudioClip moveSound; 
+    public AudioClip swapSound; 
+    public AudioClip matchSound; 
+    public AudioClip eggSound; 
+
     // For now just colors but we'll want to have a list of image sprites later on
     private static readonly Color[] COLORS = {Color.red, Color.blue, Color.yellow, Color.purple, Color.orange};
 
@@ -30,6 +38,8 @@ public class MainSceneManagerScript : MonoBehaviour
         _playerTransform = player.transform;
         scale = _playerTransform.localScale.x * 0.5f;
         SpawnBlocks();
+
+        _audioSource = GetComponent<AudioSource>(); 
     }
 
     private void SpawnBlocks()
@@ -71,6 +81,8 @@ public class MainSceneManagerScript : MonoBehaviour
     {
         int direction = Mathf.RoundToInt(input.Get<float>());
         playerPosition = Mathf.Clamp(playerPosition + direction, -1, 1);
+
+        _audioSource.PlayOneShot(moveSound); 
     }
 
     // [TODO]: fix if swap would place column inside currently-falling block
@@ -92,6 +104,8 @@ public class MainSceneManagerScript : MonoBehaviour
             }
             columns[leftIdx] = right;
             columns[rightIdx] = left;
+
+            _audioSource.PlayOneShot(swapSound); 
         }
     }
 
@@ -130,9 +144,9 @@ public class MainSceneManagerScript : MonoBehaviour
         columns[column].Remove(prev);
         Destroy(prev);
 
-        // [TODO]: Audio
-
         UpdateScore(); 
+
+        _audioSource.PlayOneShot(matchSound); 
     }
 
     /// <summary>
@@ -142,6 +156,11 @@ public class MainSceneManagerScript : MonoBehaviour
     private void DestroyEgg(int column)
     {
         // [TODO]: Logic and audio
+        int numBlocksBetween = 1; 
+
+        UpdateScore(10 * numBlocksBetween); 
+
+        _audioSource.PlayOneShot(eggSound); 
     }
 
     /// <summary>
