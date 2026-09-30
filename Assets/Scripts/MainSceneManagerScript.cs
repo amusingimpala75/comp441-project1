@@ -25,10 +25,7 @@ public class MainSceneManagerScript : MonoBehaviour
 
     // Audio
     AudioSource _audioSource; 
-    public AudioClip moveSound; 
-    public AudioClip swapSound; 
-    public AudioClip matchSound; 
-    public AudioClip eggSound; 
+    public AudioClip moveSound, swapSound, matchSound, eggSound; 
 
     // For now just colors but we'll want to have a list of image sprites later on
     private static readonly Color[] COLORS = {Color.red, Color.blue, Color.yellow, Color.purple, Color.orange};
