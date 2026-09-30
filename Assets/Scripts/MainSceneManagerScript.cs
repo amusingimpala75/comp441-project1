@@ -64,7 +64,6 @@ public class MainSceneManagerScript : MonoBehaviour
     private void Update()
     {
         _playerTransform.position = (Vector2.down * 4) + (Vector2.right * (playerPosition * scale));
-        scoreText.text = $"Score: {score}";
     }
 
     public void OnMove(InputValue input)
@@ -100,11 +99,7 @@ public class MainSceneManagerScript : MonoBehaviour
         float height = block.transform.position.y;
         if (columns[column].Count() > 0 && columns[column].Last().tag == block.tag)
         {
-            Destroy(block);
-            GameObject prev = columns[column].Last();
-            columns[column].Remove(prev);
-            Destroy(prev);
-            score++;
+            DestroyMatchBlock(block, column); 
         }
         else
         {
@@ -119,5 +114,16 @@ public class MainSceneManagerScript : MonoBehaviour
         {
             SpawnBlocks();
         }
+    }
+
+    private void DestroyMatchBlock(GameObject block, int column)
+    {
+        Destroy(block);
+        GameObject prev = columns[column].Last();
+        columns[column].Remove(prev);
+        Destroy(prev);
+
+        score++;
+        scoreText.text = $"Score: {score}";
     }
 }
