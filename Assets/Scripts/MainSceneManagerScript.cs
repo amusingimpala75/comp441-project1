@@ -20,6 +20,7 @@ public class MainSceneManagerScript : MonoBehaviour
     private float scale = 0f;
     private int numFalling = 0;
     private int score = 0;
+    private static readonly int ScoreIncrementUnit = 5; 
     private bool running = true;
     private List<GameObject>[] columns = {new(), new(), new(), new()};
 
@@ -155,7 +156,7 @@ public class MainSceneManagerScript : MonoBehaviour
         // [TODO]: Logic and audio
         int numBlocksBetween = 1; 
 
-        UpdateScore(10 * numBlocksBetween); 
+        UpdateScore(2 * ScoreIncrementUnit * numBlocksBetween); 
 
         _audioSource.PlayOneShot(eggSound); 
     }
@@ -164,7 +165,7 @@ public class MainSceneManagerScript : MonoBehaviour
     /// Update score and scoreText
     /// </summary>
     /// <param name="howMuch">How much to add to the score. Default 5</param>
-    private void UpdateScore(int howMuch = 5)
+    private void UpdateScore(int howMuch = ScoreIncrementUnit)
     {
         score += howMuch;
         scoreText.text = $"Score: {score}";
