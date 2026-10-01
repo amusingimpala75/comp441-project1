@@ -171,7 +171,7 @@ MonoBehaviour:
   eggCountText: {fileID: 855868115}
   tileSize: 0.75
   gameSpeed: 2
-  moveSound: {fileID: 8300000, guid: 3a5d5c4ad95c248ff8a131f40d797992, type: 3}
+  moveSound: {fileID: 8300000, guid: 6077d6258f375425aaf4a021acca4dda, type: 3}
   swapSound: {fileID: 8300000, guid: ff1642518d2144cdf91e5942e3525da3, type: 3}
   matchSound: {fileID: 8300000, guid: ae1c9c3efe1914a1aaf8f6aaf3d7eb54, type: 3}
   eggSound: {fileID: 8300000, guid: 90574bbfba4964760b771309524fc0c0, type: 3}

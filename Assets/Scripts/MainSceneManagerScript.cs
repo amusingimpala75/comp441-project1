@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using UnityEditor.EditorTools;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(AudioSource))]
 public class MainSceneManagerScript : MonoBehaviour
@@ -25,6 +27,7 @@ public class MainSceneManagerScript : MonoBehaviour
     private int eggCount = 0; 
     private bool running = true;
     private List<GameObject>[] columns = {new(), new(), new(), new()};
+    private List<GameObject> falling = new();
 
     // Audio
     AudioSource _audioSource; 
@@ -87,6 +90,7 @@ public class MainSceneManagerScript : MonoBehaviour
         BlockScript block = obj.GetComponent<BlockScript>();
         block.manager = this;
         block.column = col;
+        falling.Add(obj);
     }
 
     private void Update()
@@ -113,14 +117,31 @@ public class MainSceneManagerScript : MonoBehaviour
             List<GameObject> right = columns[rightIdx];
             foreach (GameObject block in left)
             {
-                block.transform.position = block.transform.position + (Vector3.right * scale);
+                block.transform.position += Vector3.right * scale;
             }
             foreach (GameObject block in right)
             {
-                block.transform.position = block.transform.position + (Vector3.left * scale);
+                block.transform.position += Vector3.left * scale;
             }
             columns[leftIdx] = right;
             columns[rightIdx] = left;
+
+            foreach (GameObject obj in falling)
+            {
+                float y = obj.transform.position.y;
+                BlockScript block = obj.GetComponent<BlockScript>();
+                if (block.column == leftIdx && right.Count() > 0 && right.Last().transform.position.y + scale > y)
+                {
+                    obj.transform.position += Vector3.right * scale;
+                    block.column++;
+
+                }
+                else if (block.column == rightIdx && left.Count() > 0 && left.Last().transform.position.y + scale > y)
+                {
+                    obj.transform.position += Vector3.left * scale;
+                    block.column--;
+                }
+            }
 
             _audioSource.PlayOneShot(swapSound); 
         }
@@ -129,13 +150,14 @@ public class MainSceneManagerScript : MonoBehaviour
     public void StopBlock(GameObject block, int column)
     {
         float height = block.transform.position.y;
+        falling.Remove(block);
 
         if (block.tag == "topEgg" && columns[column].FindLastIndex(block => block.tag == "bottomEgg") != -1)
         {
             // If the topEgg column has a bottomEgg
             DestroyEgg(block, column); 
         }
-        else if (columns[column].Count() > 0 && columns[column].Last().tag == block.tag && block.tag != "topEgg" && block.tag != "bottomEgg")
+        else if (columns[column].Count() > 0 && columns[column].Last().tag == block.tag && block.tag != "bottomEgg")
         {
             // If blocks that are not eggs match
             DestroyMatchBlock(block, column);  
