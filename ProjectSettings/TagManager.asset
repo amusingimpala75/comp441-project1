@@ -4,12 +4,12 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - block-0
-  - block-1
-  - block-2
-  - block-3
-  - block-4
-  - block-5
+  - sprite1
+  - sprite2
+  - sprite3
+  - sprite4
+  - bottomEgg
+  - topEgg
   layers:
   - Default
   - TransparentFX

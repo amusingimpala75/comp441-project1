@@ -36,6 +36,7 @@ public class MainSceneManagerScript : MonoBehaviour
     [SerializeField] private Sprite topEgg;
     [SerializeField] private Sprite bottomEgg;
     private Sprite[] sprites = null;
+    private string[] spriteTags = new string[]{"sprite1", "sprite2", "sprite3", "sprite4", "topEgg", "bottomEgg"}; 
 
     private void Start()
     {
@@ -70,10 +71,11 @@ public class MainSceneManagerScript : MonoBehaviour
     {
         float pos = col - 1.5f;
         GameObject obj = Instantiate(blockPrefab, new Vector2(pos * scale, 4), Quaternion.identity);
-        int colorIdx = Random.Range(0, sprites.Length);
-        obj.tag = $"block-{colorIdx}";
+        int spriteIdx = Random.Range(0, sprites.Length);
+        // [TODO]: Spawn eggshells less often
+        obj.tag = spriteTags[spriteIdx]; 
         SpriteRenderer sprite = obj.GetComponentInChildren<SpriteRenderer>();
-        sprite.sprite = sprites[colorIdx];
+        sprite.sprite = sprites[spriteIdx];
         // === Begin Chat GPT advised code for scaling sprite to size of collider
         BoxCollider2D collider = obj.GetComponent<BoxCollider2D>();
         Vector2 spriteSize = sprite.sprite.bounds.size;
@@ -125,11 +127,17 @@ public class MainSceneManagerScript : MonoBehaviour
     public void StopBlock(GameObject block, int column)
     {
         float height = block.transform.position.y;
-        if (columns[column].Count() > 0 && columns[column].Last().tag == block.tag)
+
+        if (block.tag == "topEgg" && columns[column].FindLastIndex(block => block.tag == "bottomEgg") != -1)
         {
-            DestroyMatchBlock(block, column); 
+            // If the topEgg column has a bottomEgg
+            DestroyEgg(block, column); 
         }
-        // [TODO]: Egg match logic
+        else if (columns[column].Count() > 0 && columns[column].Last().tag == block.tag && block.tag != "topEgg" && block.tag != "bottomEgg")
+        {
+            // If blocks that are not eggs match
+            DestroyMatchBlock(block, column);  
+        }
         else
         {
             columns[column].Add(block);
@@ -166,10 +174,26 @@ public class MainSceneManagerScript : MonoBehaviour
     /// Destroy top and bottom eggshells, as well as everything in between
     /// </summary>
     /// <param name="column"></param>
-    private void DestroyEgg(int column)
+    private void DestroyEgg(GameObject block, int column)
     {
-        // [TODO]: Logic and audio
-        int numBlocksBetween = 1; 
+        // Destroy topEgg
+        Destroy(block);
+
+        // Remove egg content
+        int numBlocksBetween = 0; 
+        List<GameObject> currColumn = columns[column]; 
+        while (currColumn.Last().tag != "bottomEgg")
+        {
+            GameObject currBlock = currColumn.Last(); 
+            currColumn.Remove(currBlock);
+            Destroy(currBlock); 
+            numBlocksBetween++; 
+        }
+
+        // Remove bottomEgg
+        GameObject bottomEgg = currColumn.Last(); 
+        currColumn.Remove(bottomEgg); 
+        Destroy(bottomEgg); 
 
         UpdateScore(2 * ScoreIncrementUnit * numBlocksBetween); 
 
