@@ -14,6 +14,7 @@ public class MainSceneManagerScript : MonoBehaviour
     private Transform _playerTransform;
     [SerializeField] private GameObject blockPrefab;
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text eggCountText; 
     [SerializeField] private float tileSize;
     [SerializeField] public float gameSpeed;
     private int playerPosition = 0;
@@ -21,6 +22,7 @@ public class MainSceneManagerScript : MonoBehaviour
     private int numFalling = 0;
     private int score = 0;
     private const int ScoreIncrementUnit = 5; 
+    private int eggCount = 0; 
     private bool running = true;
     private List<GameObject>[] columns = {new(), new(), new(), new()};
 
@@ -196,6 +198,8 @@ public class MainSceneManagerScript : MonoBehaviour
         Destroy(bottomEgg); 
 
         UpdateScore(2 * ScoreIncrementUnit * numBlocksBetween); 
+        eggCount++; 
+        eggCountText.text = $"Egg #: {eggCount.ToString("D2")}";  // pad to 2-digit
 
         _audioSource.PlayOneShot(eggSound); 
     }
