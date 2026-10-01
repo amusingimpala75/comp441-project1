@@ -166,14 +166,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   player: {fileID: 1197846682}
-  blockPrefab: {fileID: 1226552599057264412, guid: 769d4abfaf4f3cf4fbe37f0e297481d2, type: 3}
+  blockPrefab: {fileID: 2146177813259239152, guid: 362fac04207714d419390e8656fab8b4, type: 3}
   scoreText: {fileID: 442956010}
   tileSize: 0.75
   gameSpeed: 2
-  moveSound: {fileID: 8300000, guid: 3a5d5c4ad95c248ff8a131f40d797992, type: 3}
+  moveSound: {fileID: 8300000, guid: 6077d6258f375425aaf4a021acca4dda, type: 3}
   swapSound: {fileID: 8300000, guid: ff1642518d2144cdf91e5942e3525da3, type: 3}
   matchSound: {fileID: 8300000, guid: ae1c9c3efe1914a1aaf8f6aaf3d7eb54, type: 3}
   eggSound: {fileID: 8300000, guid: 90574bbfba4964760b771309524fc0c0, type: 3}
+  sprite1: {fileID: 2353571312451627304, guid: d63207e51907d4262916d2995ed289e3, type: 3}
+  sprite2: {fileID: 6710978388883721089, guid: 83fc0d25ed3c14f8eb150cbca30e6b6e, type: 3}
+  sprite3: {fileID: 3010103503655691094, guid: 2856696a9528d45bf96a4980e503fc6a, type: 3}
+  sprite4: {fileID: 6666875012819194, guid: c04d7868cb5a8428a82bffeefaa94cf5, type: 3}
+  topEgg: {fileID: 5301769822615136324, guid: 4d78937af125c4fff94c01e56f7a6dae, type: 3}
+  bottomEgg: {fileID: 8049492750855113740, guid: 48c3104699a314dd08436595fb9bb9e8, type: 3}
 --- !u!114 &226762253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +223,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: a7676fa9634b949ba8c55739b6d95d58, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -519,7 +525,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.335849, g: 0.335849, b: 0.335849, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

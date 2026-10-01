@@ -29,10 +29,18 @@ public class MainSceneManagerScript : MonoBehaviour
     public AudioClip moveSound, swapSound, matchSound, eggSound; 
 
     // For now just colors but we'll want to have a list of image sprites later on
-    private static readonly Color[] COLORS = {Color.red, Color.blue, Color.yellow, Color.purple, Color.orange};
+    [SerializeField] private Sprite sprite1;
+    [SerializeField] private Sprite sprite2;
+    [SerializeField] private Sprite sprite3;
+    [SerializeField] private Sprite sprite4;
+    [SerializeField] private Sprite topEgg;
+    [SerializeField] private Sprite bottomEgg;
+    private Sprite[] sprites = null;
 
     private void Start()
     {
+        sprites = new Sprite[]{sprite1, sprite2, sprite3, sprite4, topEgg, bottomEgg};
+
         _playerTransform = player.transform;
         scale = _playerTransform.localScale.x * 0.5f;
         SpawnBlocks();
@@ -62,9 +70,16 @@ public class MainSceneManagerScript : MonoBehaviour
     {
         float pos = col - 1.5f;
         GameObject obj = Instantiate(blockPrefab, new Vector2(pos * scale, 4), Quaternion.identity);
-        int colorIdx = Random.Range(0, COLORS.Length);
+        int colorIdx = Random.Range(0, sprites.Length);
         obj.tag = $"block-{colorIdx}";
-        obj.GetComponent<SpriteRenderer>().color = COLORS[colorIdx];
+        SpriteRenderer sprite = obj.GetComponentInChildren<SpriteRenderer>();
+        sprite.sprite = sprites[colorIdx];
+        // === Begin Chat GPT advised code for scaling sprite to size of collider
+        BoxCollider2D collider = obj.GetComponent<BoxCollider2D>();
+        Vector2 spriteSize = sprite.sprite.bounds.size;
+        Vector2 colliderSize = collider.size;
+        sprite.transform.localScale = new Vector3(colliderSize.x / spriteSize.x, colliderSize.y / spriteSize.y, 1f);
+        // === End GPT advised code
         BlockScript block = obj.GetComponent<BlockScript>();
         block.manager = this;
         block.column = col;

@@ -9,6 +9,7 @@ TagManager:
   - block-2
   - block-3
   - block-4
+  - block-5
   layers:
   - Default
   - TransparentFX
