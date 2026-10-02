@@ -152,10 +152,19 @@ public class MainSceneManagerScript : MonoBehaviour
         float height = block.transform.position.y;
         falling.Remove(block);
 
-        if (block.tag == "topEgg" && columns[column].FindLastIndex(block => block.tag == "bottomEgg") != -1)
+        if (block.tag == "topEgg")
         {
-            // If the topEgg column has a bottomEgg
-            DestroyEgg(block, column); 
+            if (columns[column].FindLastIndex(block => block.tag == "bottomEgg") == -1)
+            {
+                // If topEgg column does not have bottomEgg, disappear
+                Destroy(block); 
+            }
+            else
+            {
+                 // If the topEgg column has a bottomEgg
+                DestroyEgg(block, column); 
+            }
+
         }
         else if (columns[column].Count() > 0 && columns[column].Last().tag == block.tag && block.tag != "bottomEgg")
         {
